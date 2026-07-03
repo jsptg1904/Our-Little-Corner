@@ -1,0 +1,442 @@
+body {
+    background-color: #ffd1dc;
+    /* Hồng pastel */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: #d63384;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* ============================
+   NHẠC NỀN NHỎ (Background Music Button)
+   Prefix "bm-" để không trùng id/class
+   với CLOCKBOX.css / wishbox.css / webuptime.css hiện tại
+============================ */
+
+.bm-btn {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #ffccd5;
+    box-shadow: 0 8px 18px rgba(255, 77, 109, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 997;
+    transition: transform .15s, box-shadow .15s;
+    padding: 0;
+}
+
+.bm-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 22px rgba(255, 77, 109, 0.35);
+}
+
+.bm-btn:active {
+    transform: scale(0.95);
+}
+
+.bm-note {
+    font-size: 22px;
+    display: inline-block;
+    transition: transform .2s ease;
+}
+
+/* Khi đang phát nhạc: nốt nhạc xoay tròn nhẹ nhàng */
+.bm-btn.bm-playing .bm-note {
+    animation: bm-spin 3s linear infinite;
+}
+
+@keyframes bm-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Viền nhấp nháy nhẹ khi đang phát, như loa đang rung */
+.bm-btn.bm-playing {
+    animation: bm-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes bm-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 8px 18px rgba(255, 77, 109, 0.25);
+    }
+
+    50% {
+        box-shadow: 0 8px 22px rgba(255, 77, 109, 0.5);
+    }
+}
+
+
+/* NAVIGATION BAR STYLES */
+/* NAVIGATION BAR */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+#navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: #fff0f3;
+    border-bottom: 2px solid #ffc8d3;
+    border-radius: 0 0 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 64px;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+.nav-logo {
+    font-size: 17px;
+    font-weight: 700;
+    color: #d63384;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #c0527a;
+    padding: 8px 16px;
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+.nav-item:hover {
+    background-color: #ffd6e0;
+    color: #a0294e;
+}
+
+.nav-item.active {
+    background-color: #ff4d6d;
+    color: #ffffff;
+}
+
+.nav-deco {
+    font-size: 18px;
+    opacity: 0.5;
+}
+
+/* Đẩy nội dung xuống để không bị navbar che */
+body {
+    padding-top: 80px;
+}
+
+
+
+
+/* TICKER BANNER */
+#ticker-wrap {
+    width: 100%;
+    background: #fff0f3;
+    border-top: 2px solid #ffc8d3;
+    border-bottom: 2px solid #ffc8d3;
+    overflow: hidden;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    z-index: 998;
+}
+
+#ticker-track {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: ticker-scroll 5s linear infinite;
+}
+
+#ticker-wrap:hover #ticker-track {
+    animation-play-state: paused;
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #d63384;
+    padding: 0 28px;
+    border-right: 1.5px solid #ffc8d3;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+
+#timer {
+    font-size: 2.5rem;
+    /* Giảm size chữ lại một chút để không bị tràn màn hình khi để ngang */
+    font-weight: 800;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 30px;
+    box-shadow: 0 10px 20px rgba(255, 77, 109, 0.2);
+    border: 3px solid #ffccd5;
+    text-align: center;
+    white-space: nowrap;
+    /* Ép nội dung nằm trên 1 hàng ngang, không tự xuống dòng */
+}
+
+footer {
+    position: static;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    padding: 20px 0;
+    background-color: rgba(255, 255, 255, 0.6);
+    color: #ff4d6d;
+    text-align: center;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    overflow: visible;
+    /* THÊM */
+}
+
+
+
+
+
+/* HỘP QUÀ TẶNG */
+
+.wb-wrap {
+    margin-top: 18px;
+    background: #fff;
+    border: 3px solid #ffccd5;
+    border-radius: 24px;
+    padding: 16px 24px;
+    box-shadow: 0 10px 20px rgba(255, 77, 109, 0.15);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 1000px;
+    width: 800px;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+    transition: transform .15s, box-shadow .15s;
+}
+
+.wb-wrap:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 24px rgba(255, 77, 109, 0.22);
+}
+
+.wb-wrap:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.wb-icon {
+    font-size: 26px;
+    flex-shrink: 0;
+    animation: wb-bounce 1.6s ease-in-out infinite;
+    transition: transform .3s ease;
+}
+
+/* Khi mở ra, icon đổi tư thế 1 chút cho vui mắt */
+.wb-wrap.wb-open .wb-icon {
+    transform: rotate(-8deg) scale(1.1);
+}
+
+@keyframes wb-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.wb-wrap.wb-open .wb-icon {
+    animation: none;
+}
+
+/* Phần chứa lời chúc, mặc định đóng lại */
+.wb-text-inner {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height .35s ease, opacity .3s ease;
+    flex: 1;
+    min-width: 0;
+    white-space: pre-line;
+}
+
+.wb-wrap.wb-open .wb-text-inner {
+    max-height: 450px;
+    opacity: 1;
+}
+
+.wb-text {
+    font-family: 'Nunito', 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff4d6d;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.wb-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    background: #ff4d6d;
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: wb-blink 0.7s infinite;
+}
+
+@keyframes wb-blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Gợi ý bấm vào, chỉ hiện khi hộp còn đóng */
+.wb-hint {
+    font-family: 'Nunito', 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #c0527a;
+    align-self: center;
+    white-space: nowrap;
+    transition: opacity .2s ease;
+}
+
+.wb-wrap.wb-open .wb-hint {
+    display: none;
+}
+
+/* ============================
+   CONFETTI riêng cho wish box
+============================ */
+.wb-confetti-wrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.wb-cp {
+    position: absolute;
+    border-radius: 2px;
+    animation: wb-cf linear forwards;
+    opacity: 0;
+}
+
+@keyframes wb-cf {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+
+
+
+
+/* NHỮNG CÁI HÌNH ẢNH BAY QUA TỪ TRÁI SANG PHẢI */
+
+#flying-pics-lane {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.flying-pic {
+    position: absolute;
+    animation: flyingPicMove linear infinite;
+}
+
+.flying-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@keyframes flyingPicMove {
+    from {
+        left: -80px;
+    }
+
+    to {
+        left: calc(100% + 80px);
+    }
+}
+
+/*CON HEO CHẠY FOOTER*/
+
+
+/* TEST */

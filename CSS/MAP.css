@@ -1,0 +1,263 @@
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #ffd1dc;
+            color: #d63384;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* NAVBAR */
+        #navbar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            z-index: 9999;
+            background: #fff0f3;
+            border-bottom: 2px solid #ffc8d3;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            height: 64px;
+        }
+        .nav-logo { font-size: 17px; font-weight: 700; color: #d63384; }
+        .nav-links { display: flex; gap: 6px; list-style: none; }
+        .nav-item {
+            display: inline-flex; align-items: center; gap: 6px;
+            text-decoration: none; font-size: 14px; font-weight: 600;
+            color: #c0527a; padding: 8px 16px; border-radius: 999px;
+            transition: background .2s, color .2s;
+        }
+        .nav-item:hover { background: #ffd6e0; color: #a0294e; }
+        .nav-item.active { background: #ff4d6d; color: #fff; }
+        .nav-deco { font-size: 18px; opacity: .5; }
+
+        /* MAP */
+        #map-wrapper { margin-top: 64px; flex: 1; position: relative; }
+        #map { width: 100%; height: 100%; }
+
+        /* HINT */
+        #hint {
+            position: absolute;
+            top: 16px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(255,255,255,0.92);
+            border: 2px solid #ffc8d3;
+            border-radius: 999px;
+            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #d63384;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* COUNTER */
+        #counter {
+            position: absolute;
+            bottom: 24px; right: 16px;
+            z-index: 999;
+            background: rgba(255,255,255,0.92);
+            border: 2px solid #ffc8d3;
+            border-radius: 16px;
+            padding: 10px 18px;
+            text-align: center;
+            font-size: 12px;
+            color: #c0527a;
+            font-weight: 700;
+        }
+        #counter span { display: block; font-size: 22px; font-weight: 800; color: #ff4d6d; }
+
+        /* ADD BUTTON */
+        #btn-add-manual {
+            position: absolute;
+            bottom: 24px; left: 16px;
+            z-index: 999;
+            background: #ff4d6d;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 22px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(255,77,109,0.3);
+            transition: background .2s;
+        }
+        #btn-add-manual:hover { background: #e0334f; }
+
+        /* OVERLAY CHUNG */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(255, 182, 193, 0.45);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+        }
+        .overlay.open { display: flex; }
+
+        /* FORM CARD CHUNG */
+        .form-card {
+            background: #fff;
+            border: 2px solid #ffc8d3;
+            border-radius: 24px;
+            padding: 28px 28px 22px;
+            width: 400px;
+            max-width: 94vw;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 8px 32px rgba(255,77,109,0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-card h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #d63384;
+            text-align: center;
+        }
+
+        .form-card label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #c0527a;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .form-card input,
+        .form-card textarea {
+            width: 100%;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 12px;
+            padding: 9px 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #d63384;
+            outline: none;
+            transition: border .2s;
+            background: #fff8fa;
+        }
+        .form-card input:focus,
+        .form-card textarea:focus { border-color: #ff4d6d; }
+        .form-card textarea { resize: vertical; min-height: 70px; }
+
+        .coords-hint {
+            font-size: 12px; color: #c0527a;
+            margin-top: 5px; display: block; line-height: 1.5;
+        }
+
+        .form-row { display: flex; gap: 10px; }
+        .form-row > div { flex: 1; }
+
+        .form-btns { display: flex; gap: 10px; margin-top: 4px; }
+
+        .btn-save {
+            flex: 1; background: #ff4d6d; color: #fff; border: none;
+            border-radius: 999px; padding: 11px;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+            cursor: pointer; transition: background .2s;
+        }
+        .btn-save:hover { background: #e0334f; }
+
+        .btn-cancel {
+            flex: 1; background: #fff0f3; color: #d63384;
+            border: 1.5px solid #ffc8d3; border-radius: 999px; padding: 11px;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+            cursor: pointer; transition: background .2s;
+        }
+        .btn-cancel:hover { background: #ffd6e0; }
+
+        .form-divider { border: none; border-top: 1.5px dashed #ffc8d3; margin: 2px 0; }
+
+        /* CUSTOM PIN */
+        .custom-pin {
+            background: #ff4d6d;
+            border: 3px solid #fff;
+            border-radius: 50% 50% 50% 0;
+            width: 32px; height: 32px;
+            transform: rotate(-45deg);
+            box-shadow: 0 4px 12px rgba(255,77,109,0.4);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .custom-pin span { transform: rotate(45deg); font-size: 14px; }
+
+        /* POPUP */
+        .leaflet-popup-content-wrapper {
+            border-radius: 16px !important;
+            border: 2px solid #ffc8d3 !important;
+            box-shadow: 0 8px 24px rgba(255,77,109,0.2) !important;
+            font-family: 'Nunito', sans-serif !important;
+        }
+        .leaflet-popup-content { font-family: 'Nunito', sans-serif; color: #d63384; min-width: 220px; }
+        .popup-name { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+        .popup-note { font-size: 12px; color: #888; margin-top: 4px; font-style: italic; }
+        .popup-img { width: 100%; border-radius: 10px; margin-top: 8px; max-height: 140px; object-fit: cover; }
+
+        /* DANH SÁCH CÁC LẦN ĐI */
+        .trips-list { margin-top: 4px; }
+        .trip-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff8fa;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 10px;
+            padding: 6px 10px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #c0527a;
+        }
+        .trip-item b { color: #d63384; }
+        .trip-delete {
+            background: none; border: none;
+            color: #ffb3c1; font-size: 14px;
+            cursor: pointer; padding: 0 2px;
+            transition: color .2s;
+        }
+        .trip-delete:hover { color: #ff4d6d; }
+
+        .popup-add-trip {
+            margin-top: 8px;
+            width: 100%;
+            background: #fff0f3;
+            color: #d63384;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .popup-add-trip:hover { background: #ffd6e0; }
+
+        .popup-delete {
+            margin-top: 6px;
+            background: none;
+            border: 1.5px solid #ffc8d3;
+            color: #ffb3c1;
+            border-radius: 999px;
+            padding: 5px 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: color .2s, border .2s;
+            width: 100%;
+        }
+        .popup-delete:hover { color: #ff4d6d; border-color: #ff4d6d; }

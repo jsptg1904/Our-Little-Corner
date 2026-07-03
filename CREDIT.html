@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Credits🌸</title>
+    <link rel="icon" href="IMG/PUG DANCE/beachpug-vib.gif" type="image/gif">
+    <script src="Javascript/auth-check.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #ffd1dc;
+            color: #d63384;
+            min-height: 100vh;
+            padding-top: 64px;
+        }
+
+        /* NAVBAR (giống các trang khác) */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            background: #fff0f3;
+            border-bottom: 2px solid #ffc8d3;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-size: 17px;
+            font-weight: 700;
+            color: #d63384;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+        }
+
+        .nav-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #c0527a;
+            padding: 8px 16px;
+            border-radius: 999px;
+            transition: background .2s, color .2s;
+        }
+
+        .nav-item:hover {
+            background: #ffd6e0;
+            color: #a0294e;
+        }
+
+        .nav-item.active {
+            background: #ff4d6d;
+            color: #fff;
+        }
+
+        .nav-deco {
+            font-size: 18px;
+            opacity: .5;
+        }
+
+        /* MAIN */
+        .main {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 28px 16px 100px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #d63384;
+            margin-bottom: 4px;
+        }
+
+        .page-sub {
+            text-align: center;
+            font-size: 13px;
+            color: #c0527a;
+            font-style: italic;
+            margin-bottom: 28px;
+        }
+
+        /* CREDITS CARD */
+        .credits {
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid #ffc8d3;
+            border-radius: 24px;
+            padding: 26px 22px;
+            box-shadow: 0 8px 32px rgba(255, 77, 109, 0.12);
+        }
+
+        .credits-title {
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #d63384;
+            margin-bottom: 18px;
+        }
+
+        .credits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .credit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff0f3;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 16px;
+            padding: 12px 16px;
+            transition: transform .15s, background .2s;
+        }
+
+        .credit-item:hover {
+            transform: translateY(-2px);
+            background: #ffe4ec;
+        }
+
+        .credit-emoji {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .credit-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .credit-role {
+            font-size: 12.5px;
+            font-weight: 800;
+            color: #d63384;
+        }
+
+        .credit-note {
+            font-size: 11px;
+            color: #c0527a;
+            margin-top: 2px;
+        }
+
+        .credit-item.credit-em {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #ffd6e0, #ffc2d1);
+            border: 2px solid #ff4d6d;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            margin-top: 6px;
+        }
+
+        .credit-item.credit-em .credit-emoji {
+            font-size: 30px;
+        }
+
+        .credit-item.credit-em .credit-role {
+            font-size: 15px;
+            color: #a0294e;
+            letter-spacing: .5px;
+        }
+
+        .credit-item.credit-em .credit-note {
+            font-size: 12.5px;
+            color: #d63384;
+        }
+
+        .credits-footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 12px;
+            color: #ffb3c1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="navbar">
+        <div class="nav-logo">🌸 Our Little Corner</div>
+        <ul class="nav-links">
+            <li><a href="CLOCKBOX.html" class="nav-item">🏠 Homepage</a></li>
+            <li><a href="MAP.html" class="nav-item">🗺️ Map</a></li>
+            <li><a href="GALLERY.html" class="nav-item">📷 Gallery</a></li>
+            <li><a href="CREDIT.html" class="nav-item active">💝 Credits</a></li>
+        </ul>
+        <div class="nav-deco">🐷 ❤️ 🐷</div>
+    </nav>
+
+    <div class="main">
+        <div class="page-title">💝 Credits</div>
+        <div class="page-sub">Những người đã góp sức làm nên trang web này~</div>
+
+        <div class="credits">
+            <div class="credits-title">✨ Đội ngũ sản xuất ✨</div>
+            <div class="credits-grid">
+                <div class="credit-item">
+                    <div class="credit-emoji">🦴</div>
+                    <div class="credit-text">
+                        <div class="credit-role">Lưng già</div>
+                        <div class="credit-note">Cong hết cỡ để ngồi code</div>
+                    </div>
+                </div>
+                <div class="credit-item">
+                    <div class="credit-emoji">🖐️</div>
+                    <div class="credit-text">
+                        <div class="credit-role">Tay phải</div>
+                        <div class="credit-note">Click click click click</div>
+                    </div>
+                </div>
+                <div class="credit-item">
+                    <div class="credit-emoji">🤚</div>
+                    <div class="credit-text">
+                        <div class="credit-role">Tay trái</div>
+                        <div class="credit-note">Giữ shift liên tù tì</div>
+                    </div>
+                </div>
+                <div class="credit-item">
+                    <div class="credit-emoji">🦵</div>
+                    <div class="credit-text">
+                        <div class="credit-role">Chân phải</div>
+                        <div class="credit-note">Rung đùi</div>
+                    </div>
+                </div>
+                <div class="credit-item">
+                    <div class="credit-emoji">🦿</div>
+                    <div class="credit-text">
+                        <div class="credit-role">Chân trái</div>
+                        <div class="credit-note">Đạp đất chịu trận sáng, trưa, chiều, tối</div>
+                    </div>
+                </div>
+                <div class="credit-item">
+                    <div class="credit-emoji">👀</div>
+                    <div class="credit-text">
+                        <div class="credit-role">Đôi mắt</div>
+                        <div class="credit-note">Dán chặt vào màn hình (và em trong lúc meet nữa:>)</div>
+                    </div>
+                </div>
+
+                <div class="credit-item credit-em">
+                    <div class="credit-emoji">💖</div>
+                    <div class="credit-text">
+                        <div class="credit-role">VÀ ĐẶC BIỆT LÀ... EMMMM</div>
+                        <div class="credit-note">Người đã góp sức để mọi dòng code trở nên xứng đáng :333 </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="credits-footer">Made with 🩹 lưng đau, 👁️ mắt mỏi, thời gian ngồi google meet, và rất nhiều
+                💕💕💕
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Map 🗺️</title>
+    <link rel="icon" href="IMG/PUG DANCE/beachpug-vib.gif" type="image/gif">
+    <script src="Javascript/auth-check.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="CSS/MAP.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="nav-logo">🌸 Our Little Corner</div>
+        <ul class="nav-links">
+            <li><a href="CLOCKBOX.html" class="nav-item">🏠 Homepage</a></li>
+            <li><a href="MAP.html" class="nav-item active">🗺️ Map</a></li>
+            <li><a href="GALLERY.html" class="nav-item">📷 Gallery</a></li>
+            <li><a href="CREDIT.html" class="nav-item">💝 Credits</a></li>
+        </ul>
+        <div class="nav-deco">🐷 ❤️ 🐷</div>
+    </nav>
+
+    <!-- MAP -->
+    <div id="map-wrapper">
+        <div id="map"></div>
+        <div id="hint">💕 Click vào bản đồ hoặc nhấn nút bên dưới để thêm địa điểm</div>
+        <div id="counter">
+            <span id="counter-num">0</span>
+            nơi đã đi qua
+        </div>
+        <button id="btn-add-manual" onclick="openFormManual()">+ Thêm địa điểm</button>
+    </div>
+
+    <!-- FORM THÊM ĐỊA ĐIỂM MỚI -->
+    <div id="form-overlay" class="overlay">
+        <div class="form-card">
+            <h2>📍 Thêm địa điểm mới</h2>
+
+            <div>
+                <label>Tọa độ từ Google Maps</label>
+                <input type="text" id="f-coords" placeholder="Ví dụ: 10.7769, 106.7009" />
+                <span class="coords-hint">
+                    💡 Chuột phải vào Google Maps → click vào dòng số tọa độ để copy<br>
+                    🖱️ Hoặc click thẳng lên bản đồ để tự điền
+                </span>
+            </div>
+
+            <hr class="form-divider" />
+
+            <div>
+                <label>Tên địa điểm *</label>
+                <input type="text" id="f-name" placeholder="Ví dụ: THPT Chuyên Lê Hồng Phong, ..." />
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label>Ngày đến đầu tiên</label>
+                    <input type="date" id="f-date" />
+                </div>
+                <div>
+                    <label>Ghi chú chuyến này</label>
+                    <input type="text" id="f-trip-note" placeholder="Làm gì ở đây..." />
+                </div>
+            </div>
+
+            <div>
+                <label>Link ảnh kỉ niệm</label>
+                <input type="text" id="f-img" placeholder="Dán link ảnh (không bắt buộc)" />
+            </div>
+
+            <div>
+                <label>Ghi chú chung về địa điểm</label>
+                <textarea id="f-note" placeholder="Cảm xúc như thế nàoo, kỉ niệm đặc biệt ra làm saoo..."></textarea>
+            </div>
+
+            <div class="form-btns">
+                <button class="btn-cancel" onclick="closeForm()">Hủy</button>
+                <button class="btn-save" onclick="savePin()">Lưu 💕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORM THÊM CHUYẾN ĐI VÀO PIN CÓ SẴN -->
+    <div id="trip-overlay" class="overlay">
+        <div class="form-card">
+            <h2>🗓️ Thêm chuyến đi</h2>
+            <p style="text-align:center; font-size:13px; color:#c0527a;" id="trip-pin-name"></p>
+
+            <div>
+                <label>Ngày đến</label>
+                <input type="date" id="t-date" />
+            </div>
+
+            <div>
+                <label>Ghi chú chuyến này</label>
+                <input type="text" id="t-note" placeholder="Làm gì ở đây lần này..." />
+            </div>
+
+            <div class="form-btns">
+                <button class="btn-cancel" onclick="closeTripForm()">Hủy</button>
+                <button class="btn-save" onclick="saveTrip()">Thêm 💕</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ========================
+        // MAP INIT
+        // ========================
+        const map = L.map('map', { center: [16.0, 108.0], zoom: 6 });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // ========================
+        // STATE
+        // ========================
+        let pendingLatLng = null;
+        let activePinIdx = null;
+        let pins = JSON.parse(localStorage.getItem('memory-map-pins') || '[]');
+
+        // migrate data cũ: nếu pin chưa có trips thì tạo từ date cũ
+        pins = pins.map(p => {
+            if (!p.trips) {
+                p.trips = p.date ? [{ date: p.date, note: '' }] : [];
+                delete p.date;
+            }
+            return p;
+        });
+
+        let markers = [];
+
+        // ========================
+        // CUSTOM ICON
+        // ========================
+        function makePinIcon() {
+            return L.divIcon({
+                className: '',
+                html: `<div class="custom-pin"><span>💕</span></div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -36],
+            });
+        }
+
+        // ========================
+        // BUILD POPUP HTML
+        // ========================
+        function buildPopup(idx) {
+            const pin = pins[idx];
+
+            const tripsHtml = pin.trips.length > 0
+                ? pin.trips.map((t, ti) => `
+            <div class="trip-item">
+                <div>
+                    <b>${t.date ? formatDate(t.date) : 'Chưa ghi ngày'}</b>
+                    ${t.note ? `<br><span style="color:#aaa">${t.note}</span>` : ''}
+                </div>
+                <button class="trip-delete" title="Xóa chuyến này" onclick="deleteTrip(${idx}, ${ti})">✕</button>
+            </div>
+        `).join('')
+                : `<div style="font-size:12px;color:#ccc;margin-bottom:6px">Chưa có chuyến đi nào</div>`;
+
+            const imgHtml = pin.img ? `<img src="${pin.img}" class="popup-img" alt="ảnh" />` : '';
+            const noteHtml = pin.note ? `<div class="popup-note">💬 ${pin.note}</div>` : '';
+
+            return `
+        <div>
+            <div class="popup-name">📍 ${pin.name}</div>
+            <div style="font-size:12px;color:#c0527a;margin-bottom:6px">
+                🔁 Đã đến <b>${pin.trips.length}</b> lần
+            </div>
+            <div class="trips-list">${tripsHtml}</div>
+            ${noteHtml}
+            ${imgHtml}
+            <button class="popup-add-trip" onclick="openTripForm(${idx})">+ Thêm chuyến đi mới</button>
+            <button class="popup-delete" onclick="deletePin(${idx})">Xóa địa điểm này</button>
+        </div>
+    `;
+        }
+
+        // ========================
+        // RENDER PINS
+        // ========================
+        function renderPins() {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+
+            pins.forEach((pin, idx) => {
+                const marker = L.marker([pin.lat, pin.lng], { icon: makePinIcon() }).addTo(map);
+                marker.bindPopup(buildPopup(idx));
+                markers.push(marker);
+            });
+
+            document.getElementById('counter-num').textContent = pins.length;
+            savePins();
+        }
+
+        function savePins() {
+            localStorage.setItem('memory-map-pins', JSON.stringify(pins));
+        }
+
+        // ========================
+        // REFRESH POPUP (không close)
+        // ========================
+        function refreshPopup(idx) {
+            markers[idx].setPopupContent(buildPopup(idx));
+            savePins();
+        }
+
+        // ========================
+        // OPEN FORM THÊM ĐỊA ĐIỂM
+        // ========================
+        function resetForm() {
+            document.getElementById('f-coords').value = '';
+            document.getElementById('f-name').value = '';
+            document.getElementById('f-date').value = '';
+            document.getElementById('f-trip-note').value = '';
+            document.getElementById('f-img').value = '';
+            document.getElementById('f-note').value = '';
+        }
+
+        map.on('click', function (e) {
+            pendingLatLng = e.latlng;
+            resetForm();
+            document.getElementById('f-coords').value =
+                `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+            document.getElementById('form-overlay').classList.add('open');
+            setTimeout(() => document.getElementById('f-name').focus(), 100);
+        });
+
+        function openFormManual() {
+            pendingLatLng = null;
+            resetForm();
+            document.getElementById('form-overlay').classList.add('open');
+            setTimeout(() => document.getElementById('f-coords').focus(), 100);
+        }
+
+        function closeForm() {
+            document.getElementById('form-overlay').classList.remove('open');
+            pendingLatLng = null;
+        }
+
+        // ========================
+        // SAVE PIN MỚI
+        // ========================
+        function savePin() {
+            const name = document.getElementById('f-name').value.trim();
+            if (!name) {
+                alert('Bạn chưa nhập tên địa điểm!');
+                document.getElementById('f-name').focus();
+                return;
+            }
+
+            const coordsRaw = document.getElementById('f-coords').value.trim();
+            let lat, lng;
+
+            if (coordsRaw) {
+                const parts = coordsRaw.split(',');
+                lat = parseFloat(parts[0]);
+                lng = parseFloat(parts[1]);
+                if (isNaN(lat) || isNaN(lng)) {
+                    alert('Tọa độ không hợp lệ!\nThử lại dạng: 10.7769, 106.7009');
+                    return;
+                }
+            } else if (pendingLatLng) {
+                lat = pendingLatLng.lat;
+                lng = pendingLatLng.lng;
+            } else {
+                alert('Bạn cần paste tọa độ hoặc click vào bản đồ!');
+                return;
+            }
+
+            const firstTrip = {
+                date: document.getElementById('f-date').value,
+                note: document.getElementById('f-trip-note').value.trim(),
+            };
+
+            pins.push({
+                lat, lng,
+                name: name,
+                img: document.getElementById('f-img').value.trim(),
+                note: document.getElementById('f-note').value.trim(),
+                trips: firstTrip.date || firstTrip.note ? [firstTrip] : [],
+            });
+
+            renderPins();
+            map.flyTo([lat, lng], Math.max(map.getZoom(), 13), { duration: 1.2 });
+            closeForm();
+        }
+
+        // ========================
+        // OPEN FORM THÊM CHUYẾN ĐI
+        // ========================
+        function openTripForm(idx) {
+            activePinIdx = idx;
+            document.getElementById('trip-pin-name').textContent = `📍 ${pins[idx].name}`;
+            document.getElementById('t-date').value = '';
+            document.getElementById('t-note').value = '';
+            document.getElementById('trip-overlay').classList.add('open');
+            map.closePopup();
+            setTimeout(() => document.getElementById('t-date').focus(), 100);
+        }
+
+        function closeTripForm() {
+            document.getElementById('trip-overlay').classList.remove('open');
+            activePinIdx = null;
+        }
+
+        function saveTrip() {
+            const date = document.getElementById('t-date').value;
+            const note = document.getElementById('t-note').value.trim();
+
+            if (!date && !note) {
+                alert('Bạn cần nhập ít nhất ngày đi hoặc ghi chú!');
+                return;
+            }
+
+            pins[activePinIdx].trips.push({ date, note });
+
+            // sort trips theo ngày
+            pins[activePinIdx].trips.sort((a, b) => {
+                if (!a.date) return 1;
+                if (!b.date) return -1;
+                return new Date(a.date) - new Date(b.date);
+            });
+
+            refreshPopup(activePinIdx);
+            closeTripForm();
+
+            // Mở lại popup
+            setTimeout(() => markers[activePinIdx].openPopup(), 200);
+        }
+
+        // ========================
+        // DELETE CHUYẾN ĐI
+        // ========================
+        function deleteTrip(pinIdx, tripIdx) {
+            pins[pinIdx].trips.splice(tripIdx, 1);
+            refreshPopup(pinIdx);
+        }
+
+        // ========================
+        // DELETE PIN
+        // ========================
+        function deletePin(idx) {
+            if (confirm('Xóa địa điểm này và toàn bộ lịch sử chuyến đi?')) {
+                pins.splice(idx, 1);
+                renderPins();
+                map.closePopup();
+            }
+        }
+
+        // ========================
+        // CLOSE OVERLAY KHI CLICK NGOÀI
+        // ========================
+        document.getElementById('form-overlay').addEventListener('click', function (e) {
+            if (e.target === this) closeForm();
+        });
+        document.getElementById('trip-overlay').addEventListener('click', function (e) {
+            if (e.target === this) closeTripForm();
+        });
+
+        document.getElementById('form-overlay').addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeForm();
+        });
+        document.getElementById('trip-overlay').addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeTripForm();
+            if (e.key === 'Enter') saveTrip();
+        });
+
+        // ========================
+        // HELPER
+        // ========================
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const [y, m, d] = dateStr.split('-');
+            return `${d}/${m}/${y}`;
+        }
+
+        // ========================
+        // INIT
+        // ========================
+        renderPins();
+    </script>
+</body>
+
+</html>

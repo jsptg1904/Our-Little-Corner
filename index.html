@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Xác minh danh tính cái coaii!</title>
+    <link rel="icon" href="IMG/PUG DANCE/beachpug-vib.gif" type="image/gif">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #ffd1dc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* FLOATING HEARTS */
+        .hearts-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -60px;
+            font-size: 22px;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(-10deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.7;
+            }
+
+            90% {
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: translateY(-110vh) rotate(10deg);
+                opacity: 0;
+            }
+        }
+
+        /* TIÊU ĐỀ */
+        .page-title {
+            position: relative;
+            z-index: 1;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #c0527a;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+
+        /* LOGIN CARD */
+        .login-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.85);
+            border: 2px solid #ffc8d3;
+            border-radius: 28px;
+            padding: 36px 32px;
+            width: 480px;
+            max-width: 94vw;
+            box-shadow: 0 12px 40px rgba(255, 77, 109, 0.15);
+            display: flex;
+            flex-direction: row;
+            gap: 28px;
+            align-items: center;
+        }
+
+        /* AVATAR */
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .avatar-ring {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid #ffc8d3;
+            padding: 4px;
+            background: #fff0f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .avatar-ring img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        /* Placeholder khi chưa có ảnh */
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #ffd6e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .avatar-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #d63384;
+        }
+
+        /* DIVIDER DỌC */
+        .divider-v {
+            width: 1.5px;
+            height: 120px;
+            background: #ffc8d3;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+
+        /* FORM */
+        .form-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .form-section h2 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #d63384;
+            margin-bottom: 2px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 12px;
+            padding: 10px 14px 10px 38px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #d63384;
+            background: #fff8fa;
+            outline: none;
+            transition: border .2s;
+        }
+
+        .input-wrap input:focus {
+            border-color: #ff4d6d;
+        }
+
+        .input-wrap input::placeholder {
+            color: #ffb3c6;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .error-msg {
+            font-size: 12px;
+            color: #ff4d6d;
+            font-weight: 600;
+            min-height: 16px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: #ff4d6d;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 11px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s, transform .1s;
+            margin-top: 2px;
+        }
+
+        .btn-login:hover {
+            background: #e0334f;
+        }
+
+        .btn-login:active {
+            transform: scale(0.98);
+        }
+
+        /* DECORATIONS */
+        .deco-top {
+            position: fixed;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 22px;
+            z-index: 0;
+            opacity: 0.4;
+            letter-spacing: 12px;
+        }
+
+        .deco-bottom {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 22px;
+            z-index: 0;
+            opacity: 0.4;
+            letter-spacing: 12px;
+        }
+
+        /* SHAKE ANIMATION */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-8px);
+            }
+
+            40% {
+                transform: translateX(8px);
+            }
+
+            60% {
+                transform: translateX(-5px);
+            }
+
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.4s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- FLOATING HEARTS BG -->
+    <div class="hearts-bg" id="hearts-bg"></div>
+
+    <!-- DECO -->
+    <div class="deco-top">🌸 💕 🌸 💕 🌸 💕 🌸</div>
+    <div class="deco-bottom">🐷 ❤️ 🐷 ❤️ 🐷 ❤️ 🐷</div>
+
+    <!-- TITLE -->
+    <div class="page-title">✨ Our Little Corner ✨</div>
+
+    <!-- LOGIN CARD -->
+    <div class="login-card" id="login-card">
+
+        <!-- AVATAR BÊN TRÁI -->
+        <div class="avatar-section">
+            <div class="avatar-ring">
+                <!-- THAY src BẰNG LINK ẢNH CỦA JOLY -->
+                <div class="avatar-placeholder"><img src="IMG/jolywpresent.png" alt="Joly"></div>
+            </div>
+            <div class="avatar-name">Joly 💕</div>
+        </div>
+
+        <div class="divider-v"></div>
+
+        <!-- FORM BÊN PHẢI -->
+        <div class="form-section">
+            <h2>Xác minh danh tính</h2>
+
+            <div class="input-wrap">
+                <span class="input-icon">👤</span>
+                <input type="text" id="inp-user" placeholder="Username" autocomplete="off" />
+            </div>
+
+            <div class="input-wrap">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="inp-pass" placeholder="Password" />
+            </div>
+
+            <div class="error-msg" id="error-msg">Sai username hoặc mật khẩu rồi 🥺</div>
+
+            <button class="btn-login" onclick="doLogin()">Vào thôi 💕</button>
+        </div>
+    </div>
+
+    <script>
+        // ========================
+        // CONFIG — đổi ở đây
+        // ========================
+        const CORRECT_USERNAME = "joly";       // username
+        const CORRECT_PASSWORD = "08112008";   // mật khẩu
+
+        // ========================
+        // KIỂM TRA SESSION
+        // ========================
+        if (sessionStorage.getItem('olc-auth') === 'true') {
+            window.location.href = 'CLOCKBOX.html';
+        }
+
+        // ========================
+        // LOGIN
+        // ========================
+        function doLogin() {
+            const user = document.getElementById('inp-user').value.trim().toLowerCase();
+            const pass = document.getElementById('inp-pass').value;
+            const card = document.getElementById('login-card');
+            const err = document.getElementById('error-msg');
+
+            if (user === CORRECT_USERNAME && pass === CORRECT_PASSWORD) {
+                sessionStorage.setItem('olc-auth', 'true');
+                card.style.transition = 'opacity .4s';
+                card.style.opacity = '0';
+                setTimeout(() => window.location.href = 'CLOCKBOX.html', 400);
+            } else {
+                err.classList.add('show');
+                card.classList.remove('shake');
+                void card.offsetWidth;
+                card.classList.add('shake');
+                document.getElementById('inp-pass').value = '';
+                document.getElementById('inp-pass').focus();
+            }
+        }
+
+        // Enter để login
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') doLogin();
+        });
+
+        // ========================
+        // FLOATING HEARTS
+        // ========================
+        const emojis = ['💕', '🌸', '❤️', '🩷', '💗', '🌷'];
+        const bg = document.getElementById('hearts-bg');
+
+        function spawnHeart() {
+            const el = document.createElement('div');
+            el.classList.add('heart');
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = (14 + Math.random() * 18) + 'px';
+            const dur = 6 + Math.random() * 6;
+            el.style.animationDuration = dur + 's';
+            el.style.animationDelay = (Math.random() * 3) + 's';
+            bg.appendChild(el);
+            setTimeout(() => el.remove(), (dur + 3) * 1000);
+        }
+
+        setInterval(spawnHeart, 600);
+        for (let i = 0; i < 8; i++) spawnHeart();
+    </script>
+</body>
+
+</html>

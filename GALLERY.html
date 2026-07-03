@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery📷</title>
+    <link rel="icon" href="IMG/PUG DANCE/beachpug-vib.gif" type="image/gif">
+    <script src="Javascript/auth-check.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #ffd1dc;
+            color: #d63384;
+            min-height: 100vh;
+            padding-top: 64px;
+        }
+
+        /* NAVBAR */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            background: #fff0f3;
+            border-bottom: 2px solid #ffc8d3;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-size: 17px;
+            font-weight: 700;
+            color: #d63384;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+        }
+
+        .nav-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #c0527a;
+            padding: 8px 16px;
+            border-radius: 999px;
+            transition: background .2s, color .2s;
+        }
+
+        .nav-item:hover {
+            background: #ffd6e0;
+            color: #a0294e;
+        }
+
+        .nav-item.active {
+            background: #ff4d6d;
+            color: #fff;
+        }
+
+        .nav-deco {
+            font-size: 18px;
+            opacity: .5;
+        }
+
+        /* MAIN */
+        .main {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 28px 16px 100px;
+        }
+
+        /* ===== HEADER ===== */
+        .cal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .cal-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #d63384;
+        }
+
+        .cal-nav {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cal-btn {
+            background: #fff0f3;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 999px;
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #d63384;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s;
+        }
+
+        .cal-btn:hover {
+            background: #ffd6e0;
+        }
+
+        .btn-pill {
+            background: #fff0f3;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 999px;
+            padding: 6px 16px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #d63384;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-pill:hover {
+            background: #ffd6e0;
+        }
+
+        .btn-pill.active {
+            background: #ff4d6d;
+            color: #fff;
+            border-color: #ff4d6d;
+        }
+
+        #date-picker {
+            border: 1.5px solid #ffc8d3;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #d63384;
+            background: #fff0f3;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* ===== MONTH VIEW ===== */
+        #view-month {
+            display: block;
+        }
+
+        #view-year {
+            display: none;
+        }
+
+        .cal-grid {
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px solid #ffc8d3;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(255, 77, 109, 0.1);
+        }
+
+        .cal-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: #fff0f3;
+            border-bottom: 1.5px solid #ffc8d3;
+        }
+
+        .cal-weekday {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 12px;
+            font-weight: 800;
+            color: #c0527a;
+        }
+
+        .cal-weekday:first-child {
+            color: #ff4d6d;
+        }
+
+        .cal-weekday:last-child {
+            color: #ff8fab;
+        }
+
+        .cal-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .cal-day {
+            min-height: 110px;
+            border-right: 1px solid #ffe4ec;
+            border-bottom: 1px solid #ffe4ec;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cal-day:nth-child(7n) {
+            border-right: none;
+        }
+
+        .day-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.22;
+            transition: opacity .2s;
+            z-index: 0;
+        }
+
+        .cal-day:hover .day-bg {
+            opacity: 0.38;
+        }
+
+        .day-content {
+            position: relative;
+            z-index: 1;
+            padding: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cal-day.empty {
+            background: rgba(255, 255, 255, 0.3);
+            cursor: default;
+        }
+
+        .cal-day.empty:hover .day-bg {
+            opacity: 0.22;
+        }
+
+        .day-num {
+            font-size: 13px;
+            font-weight: 700;
+            color: #d63384;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .cal-day.today .day-num {
+            background: #ff4d6d;
+            color: #fff;
+            border-radius: 50%;
+        }
+
+        .day-sunday .day-num {
+            color: #ff4d6d;
+        }
+
+        .day-saturday .day-num {
+            color: #ff8fab;
+        }
+
+        .day-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: #d63384;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 6px;
+            padding: 2px 6px;
+            margin-top: 4px;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .day-thumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-top: auto;
+            padding-top: 4px;
+        }
+
+        .day-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            object-fit: cover;
+            border: 1.5px solid #ffc8d3;
+        }
+
+        .day-more {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            background: rgba(255, 214, 224, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 800;
+            color: #d63384;
+        }
+
+        /* ===== YEAR VIEW ===== */
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .year-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .mini-month {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #ffc8d3;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(255, 77, 109, 0.08);
+            cursor: pointer;
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .mini-month:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(255, 77, 109, 0.18);
+        }
+
+        .mini-month-header {
+            background: #fff0f3;
+            border-bottom: 1.5px solid #ffc8d3;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #d63384;
+            text-align: center;
+        }
+
+        .mini-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            padding: 4px 4px 0;
+        }
+
+        .mini-weekday {
+            text-align: center;
+            font-size: 8px;
+            font-weight: 800;
+            color: #ffb3c6;
+            padding: 2px 0;
+        }
+
+        .mini-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            padding: 0 4px 6px;
+        }
+
+        .mini-day {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 600;
+            color: #d63384;
+            position: relative;
+            overflow: hidden;
+            margin: 1px;
+        }
+
+        .mini-day.empty {
+            color: transparent;
+        }
+
+        .mini-day.has-data {
+            background: #ffd6e0;
+        }
+
+        .mini-day.today-mini {
+            background: #ff4d6d;
+            color: #fff;
+            font-weight: 800;
+            border-radius: 50%;
+        }
+
+        .mini-day-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.35;
+            border-radius: 4px;
+        }
+
+        .mini-day-num {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mini-day-dot {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            width: 4px;
+            height: 4px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* ADD BUTTON */
+        #btn-add {
+            position: fixed;
+            bottom: 28px;
+            right: 24px;
+            z-index: 999;
+            background: #ff4d6d;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 14px 24px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 77, 109, 0.35);
+            transition: background .2s;
+        }
+
+        #btn-add:hover {
+            background: #e0334f;
+        }
+
+        /* OVERLAY */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(255, 182, 193, 0.45);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .overlay.open {
+            display: flex;
+        }
+
+        /* FORM */
+        .form-card {
+            background: #fff;
+            border: 2px solid #ffc8d3;
+            border-radius: 24px;
+            padding: 28px 28px 22px;
+            width: 420px;
+            max-width: 94vw;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 8px 32px rgba(255, 77, 109, 0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-card h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #d63384;
+            text-align: center;
+        }
+
+        .form-card label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #c0527a;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .form-card input,
+        .form-card textarea {
+            width: 100%;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 12px;
+            padding: 9px 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #d63384;
+            background: #fff8fa;
+            outline: none;
+            transition: border .2s;
+        }
+
+        .form-card input:focus,
+        .form-card textarea:focus {
+            border-color: #ff4d6d;
+        }
+
+        .form-card textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: #ffb3c6;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .form-divider {
+            border: none;
+            border-top: 1.5px dashed #ffc8d3;
+        }
+
+        .form-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .btn-save {
+            flex: 1;
+            background: #ff4d6d;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 11px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-save:hover {
+            background: #e0334f;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: #fff0f3;
+            color: #d63384;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 999px;
+            padding: 11px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-cancel:hover {
+            background: #ffd6e0;
+        }
+
+        /* DAY PANEL */
+        #day-panel {
+            background: #fff;
+            border: 2px solid #ffc8d3;
+            border-radius: 24px;
+            padding: 28px;
+            width: 520px;
+            max-width: 94vw;
+            max-height: 85vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 8px 32px rgba(255, 77, 109, 0.15);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #d63384;
+        }
+
+        .panel-event-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ff8fab;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .panel-close {
+            background: none;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 999px;
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #d63384;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s;
+            flex-shrink: 0;
+        }
+
+        .panel-close:hover {
+            background: #ffd6e0;
+        }
+
+        .photo-card {
+            border: 1.5px solid #ffc8d3;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff8fa;
+        }
+
+        .photo-card img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-info {
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .photo-note {
+            font-size: 13px;
+            color: #c0527a;
+            font-style: italic;
+            flex: 1;
+        }
+
+        .photo-delete {
+            background: none;
+            border: 1.5px solid #ffc8d3;
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: #ffb3c1;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color .2s, border .2s;
+        }
+
+        .photo-delete:hover {
+            color: #ff4d6d;
+            border-color: #ff4d6d;
+        }
+
+        .panel-add-btn {
+            background: #fff0f3;
+            border: 1.5px dashed #ffc8d3;
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: #d63384;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .panel-add-btn:hover {
+            background: #ffd6e0;
+        }
+
+        .empty-panel {
+            text-align: center;
+            color: #ffb3c1;
+            font-size: 13px;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="navbar">
+        <div class="nav-logo">🌸 Our Little Corner</div>
+        <ul class="nav-links">
+            <li><a href="CLOCKBOX.html" class="nav-item">🏠 Homepage</a></li>
+            <li><a href="MAP.html" class="nav-item">🗺️ Map</a></li>
+            <li><a href="GALLERY.html" class="nav-item active">📷 Gallery</a></li>
+            <li><a href="CREDIT.html" class="nav-item">💝 Credits</a></li>
+        </ul>
+        <div class="nav-deco">🐷 ❤️ 🐷</div>
+    </nav>
+
+    <div class="main">
+
+        <!-- HEADER -->
+        <div class="cal-header">
+            <div class="cal-title" id="cal-title"></div>
+            <div class="cal-nav">
+                <button class="cal-btn" id="btn-prev" onclick="navPrev()">‹</button>
+                <input type="date" id="date-picker" onchange="jumpToDate(this.value)" title="Chọn ngày" />
+                <button class="btn-pill" id="btn-today" onclick="goToday()">Hôm nay</button>
+                <button class="btn-pill" id="btn-toggle-year" onclick="toggleYearView()">📅 Cả năm</button>
+                <button class="cal-btn" id="btn-next" onclick="navNext()">›</button>
+            </div>
+        </div>
+
+        <!-- MONTH VIEW -->
+        <div id="view-month">
+            <div class="cal-grid">
+                <div class="cal-weekdays">
+                    <div class="cal-weekday">CN</div>
+                    <div class="cal-weekday">T2</div>
+                    <div class="cal-weekday">T3</div>
+                    <div class="cal-weekday">T4</div>
+                    <div class="cal-weekday">T5</div>
+                    <div class="cal-weekday">T6</div>
+                    <div class="cal-weekday">T7</div>
+                </div>
+                <div class="cal-days" id="cal-days"></div>
+            </div>
+        </div>
+
+        <!-- YEAR VIEW -->
+        <div id="view-year">
+            <div class="year-grid" id="year-grid"></div>
+        </div>
+
+    </div>
+
+    <button id="btn-add" onclick="openAddForm()">+ Thêm ảnh / sự kiện</button>
+
+    <!-- FORM -->
+    <div id="form-overlay" class="overlay">
+        <div class="form-card">
+            <h2>📷 Thêm ảnh kỉ niệm</h2>
+            <div>
+                <label>Ngày *</label>
+                <input type="date" id="f-date" />
+            </div>
+            <hr class="form-divider" />
+            <div>
+                <label>Tiêu đề ngày này</label>
+                <input type="text" id="f-title" placeholder="Ví dụ: First Date 💕, ..." />
+                <span class="form-hint">💡 Hiện ngay trong ô lịch để dễ nhớ</span>
+            </div>
+            <div>
+                <label>Ảnh nền cho ô lịch</label>
+                <input type="text" id="f-bg" placeholder="Dán link ảnh làm nền mờ cho ô ngày" />
+                <span class="form-hint">💡 Ảnh này hiện mờ mờ làm nền trong ô lịch</span>
+            </div>
+            <hr class="form-divider" />
+            <div>
+                <label>Link ảnh kỉ niệm</label>
+                <input type="text" id="f-img" placeholder="Dán link ảnh chi tiết" />
+            </div>
+            <div>
+                <label>Ghi chú</label>
+                <textarea id="f-note" placeholder="Kỉ niệm của ngày hôm đó..."></textarea>
+            </div>
+            <div class="form-btns">
+                <button class="btn-cancel" onclick="closeForm()">Hủy</button>
+                <button class="btn-save" onclick="savePhoto()">Lưu 💕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAY PANEL -->
+    <div id="day-overlay" class="overlay">
+        <div id="day-panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title" id="panel-title"></div>
+                    <div class="panel-event-title" id="panel-event-title"></div>
+                </div>
+                <button class="panel-close" onclick="closeDayPanel()">✕</button>
+            </div>
+            <div id="panel-content"></div>
+            <div class="panel-add-btn" onclick="openAddFormForDate()">+ Thêm ảnh cho ngày này</div>
+        </div>
+    </div>
+
+    <script>
+        // ========================
+        // STATE
+        // ========================
+        let photos = JSON.parse(localStorage.getItem('gallery-photos') || '[]');
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+        let activeDateStr = null;
+        let isYearView = false;
+
+        const MONTHS_VI = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+            'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+        const MONTHS_SHORT = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+
+        function savePhotos() {
+            localStorage.setItem('gallery-photos', JSON.stringify(photos));
+        }
+
+        // ========================
+        // BUILD DAY MAP
+        // ========================
+        function buildDayMap() {
+            const map = {};
+            photos.forEach(p => {
+                if (!map[p.date]) map[p.date] = { title: '', bg: '', photos: [] };
+                if (p.title) map[p.date].title = p.title;
+                if (p.bg) map[p.date].bg = p.bg;
+                if (p.img) map[p.date].photos.push(p);
+            });
+            return map;
+        }
+
+        // ========================
+        // MONTH VIEW
+        // ========================
+        function renderMonth() {
+            document.getElementById('cal-title').textContent =
+                `${MONTHS_VI[currentMonth]} ${currentYear}`;
+            document.getElementById('date-picker').value =
+                `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`;
+
+            const daysEl = document.getElementById('cal-days');
+            daysEl.innerHTML = '';
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            const dayMap = buildDayMap();
+
+            for (let i = 0; i < firstDay; i++) {
+                const el = document.createElement('div');
+                el.classList.add('cal-day', 'empty');
+                el.innerHTML = '<div class="day-bg"></div><div class="day-content"></div>';
+                daysEl.appendChild(el);
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const data = dayMap[dateStr] || null;
+                const dayOfWeek = new Date(currentYear, currentMonth, d).getDay();
+                const isToday = today.getFullYear() === currentYear &&
+                    today.getMonth() === currentMonth &&
+                    today.getDate() === d;
+
+                const el = document.createElement('div');
+                el.classList.add('cal-day');
+                if (dayOfWeek === 0) el.classList.add('day-sunday');
+                if (dayOfWeek === 6) el.classList.add('day-saturday');
+                if (isToday) el.classList.add('today');
+
+                const bgEl = document.createElement('div');
+                bgEl.classList.add('day-bg');
+                if (data && data.bg) bgEl.style.backgroundImage = `url('${data.bg}')`;
+                el.appendChild(bgEl);
+
+                const contentEl = document.createElement('div');
+                contentEl.classList.add('day-content');
+
+                const numEl = document.createElement('div');
+                numEl.classList.add('day-num');
+                numEl.textContent = d;
+                contentEl.appendChild(numEl);
+
+                if (data && data.title) {
+                    const titleEl = document.createElement('div');
+                    titleEl.classList.add('day-title');
+                    titleEl.textContent = data.title;
+                    contentEl.appendChild(titleEl);
+                }
+
+                if (data && data.photos.length > 0) {
+                    const thumbsEl = document.createElement('div');
+                    thumbsEl.classList.add('day-thumbs');
+                    data.photos.slice(0, 3).forEach(p => {
+                        const img = document.createElement('img');
+                        img.classList.add('day-thumb');
+                        img.src = p.img; img.alt = '';
+                        img.onerror = function () { this.style.display = 'none'; };
+                        thumbsEl.appendChild(img);
+                    });
+                    if (data.photos.length > 3) {
+                        const more = document.createElement('div');
+                        more.classList.add('day-more');
+                        more.textContent = `+${data.photos.length - 3}`;
+                        thumbsEl.appendChild(more);
+                    }
+                    contentEl.appendChild(thumbsEl);
+                }
+
+                el.appendChild(contentEl);
+                el.addEventListener('click', () => openDayPanel(dateStr));
+                daysEl.appendChild(el);
+            }
+        }
+
+        // ========================
+        // YEAR VIEW
+        // ========================
+        function renderYear() {
+            document.getElementById('cal-title').textContent = `Năm ${currentYear}`;
+            document.getElementById('date-picker').value = `${currentYear}-01-01`;
+
+            const grid = document.getElementById('year-grid');
+            grid.innerHTML = '';
+            const dayMap = buildDayMap();
+            const today = new Date();
+
+            for (let m = 0; m < 12; m++) {
+                const miniMonth = document.createElement('div');
+                miniMonth.classList.add('mini-month');
+                miniMonth.title = `Xem ${MONTHS_VI[m]}`;
+
+                // Header
+                const header = document.createElement('div');
+                header.classList.add('mini-month-header');
+                header.textContent = MONTHS_VI[m];
+                miniMonth.appendChild(header);
+
+                // Weekday labels
+                const wdRow = document.createElement('div');
+                wdRow.classList.add('mini-weekdays');
+                ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].forEach(wd => {
+                    const w = document.createElement('div');
+                    w.classList.add('mini-weekday');
+                    w.textContent = wd;
+                    wdRow.appendChild(w);
+                });
+                miniMonth.appendChild(wdRow);
+
+                // Days
+                const daysRow = document.createElement('div');
+                daysRow.classList.add('mini-days');
+
+                const firstDay = new Date(currentYear, m, 1).getDay();
+                const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
+
+                for (let i = 0; i < firstDay; i++) {
+                    const empty = document.createElement('div');
+                    empty.classList.add('mini-day', 'empty');
+                    daysRow.appendChild(empty);
+                }
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dateStr = `${currentYear}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    const data = dayMap[dateStr] || null;
+                    const isToday = today.getFullYear() === currentYear &&
+                        today.getMonth() === m &&
+                        today.getDate() === d;
+
+                    const dayEl = document.createElement('div');
+                    dayEl.classList.add('mini-day');
+                    if (isToday) dayEl.classList.add('today-mini');
+                    if (data) dayEl.classList.add('has-data');
+
+                    if (data && data.bg && !isToday) {
+                        const bg = document.createElement('div');
+                        bg.classList.add('mini-day-bg');
+                        bg.style.backgroundImage = `url('${data.bg}')`;
+                        dayEl.appendChild(bg);
+                    }
+
+                    const numSpan = document.createElement('span');
+                    numSpan.classList.add('mini-day-num');
+                    numSpan.textContent = d;
+                    dayEl.appendChild(numSpan);
+
+                    if (data && data.photos.length > 0 && !isToday) {
+                        const dot = document.createElement('div');
+                        dot.classList.add('mini-day-dot');
+                        dayEl.appendChild(dot);
+                    }
+
+                    daysRow.appendChild(dayEl);
+                }
+
+                miniMonth.appendChild(daysRow);
+
+                // Click vào mini month → về month view
+                miniMonth.addEventListener('click', () => {
+                    currentMonth = m;
+                    isYearView = false;
+                    switchView();
+                });
+
+                grid.appendChild(miniMonth);
+            }
+        }
+
+        // ========================
+        // SWITCH VIEW
+        // ========================
+        function switchView() {
+            const btnToggle = document.getElementById('btn-toggle-year');
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            if (isYearView) {
+                document.getElementById('view-month').style.display = 'none';
+                document.getElementById('view-year').style.display = 'block';
+                btnToggle.textContent = '📷 Xem tháng';
+                btnToggle.classList.add('active');
+                btnPrev.title = 'Năm trước';
+                btnNext.title = 'Năm sau';
+                renderYear();
+            } else {
+                document.getElementById('view-month').style.display = 'block';
+                document.getElementById('view-year').style.display = 'none';
+                btnToggle.textContent = '📅 Cả năm';
+                btnToggle.classList.remove('active');
+                btnPrev.title = 'Tháng trước';
+                btnNext.title = 'Tháng sau';
+                renderMonth();
+            }
+        }
+
+        function toggleYearView() {
+            isYearView = !isYearView;
+            switchView();
+        }
+
+        // ========================
+        // NAVIGATE
+        // ========================
+        function navPrev() {
+            if (isYearView) { currentYear--; renderYear(); }
+            else {
+                currentMonth--;
+                if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+                renderMonth();
+            }
+        }
+
+        function navNext() {
+            if (isYearView) { currentYear++; renderYear(); }
+            else {
+                currentMonth++;
+                if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+                renderMonth();
+            }
+        }
+
+        function goToday() {
+            currentYear = new Date().getFullYear();
+            currentMonth = new Date().getMonth();
+            isYearView = false;
+            switchView();
+        }
+
+        function jumpToDate(val) {
+            if (!val) return;
+            const [y, m] = val.split('-');
+            currentYear = parseInt(y);
+            currentMonth = parseInt(m) - 1;
+            isYearView = false;
+            switchView();
+        }
+
+        // ========================
+        // DAY PANEL
+        // ========================
+        function openDayPanel(dateStr) {
+            activeDateStr = dateStr;
+            const [y, m, d] = dateStr.split('-');
+            document.getElementById('panel-title').textContent = `📅 ${d}/${m}/${y}`;
+            const dayData = photos.find(p => p.date === dateStr && p.title);
+            document.getElementById('panel-event-title').textContent =
+                dayData ? `✨ ${dayData.title}` : '';
+            renderDayPanel();
+            document.getElementById('day-overlay').classList.add('open');
+        }
+
+        function renderDayPanel() {
+            const content = document.getElementById('panel-content');
+            const dayPhotos = photos.filter(p => p.date === activeDateStr && p.img);
+
+            if (dayPhotos.length === 0) {
+                content.innerHTML = `<div class="empty-panel">Chưa có ảnh nào cho ngày này 🌸<br><span style="font-size:11px">Thêm ảnh bên dưới nhé!</span></div>`;
+                return;
+            }
+
+            content.innerHTML = '';
+            dayPhotos.forEach(p => {
+                const idx = photos.indexOf(p);
+                const card = document.createElement('div');
+                card.classList.add('photo-card');
+                card.innerHTML = `
+            <img src="${p.img}" alt="" onerror="this.style.display='none'" />
+            <div class="photo-info">
+                <div class="photo-note">${p.note || 'Không có ghi chú'}</div>
+                <button class="photo-delete" onclick="deletePhoto(${idx})">Xóa</button>
+            </div>
+        `;
+                content.appendChild(card);
+            });
+        }
+
+        function closeDayPanel() {
+            document.getElementById('day-overlay').classList.remove('open');
+            activeDateStr = null;
+            if (isYearView) renderYear(); else renderMonth();
+        }
+
+        // ========================
+        // FORM
+        // ========================
+        function openAddForm() {
+            ['f-date', 'f-title', 'f-bg', 'f-img', 'f-note'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('form-overlay').classList.add('open');
+        }
+
+        function openAddFormForDate() {
+            ['f-title', 'f-bg', 'f-img', 'f-note'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('f-date').value = activeDateStr || '';
+            closeDayPanel();
+            document.getElementById('form-overlay').classList.add('open');
+        }
+
+        function closeForm() {
+            document.getElementById('form-overlay').classList.remove('open');
+        }
+
+        function savePhoto() {
+            const date = document.getElementById('f-date').value;
+            const title = document.getElementById('f-title').value.trim();
+            const bg = document.getElementById('f-bg').value.trim();
+            const img = document.getElementById('f-img').value.trim();
+            const note = document.getElementById('f-note').value.trim();
+
+            if (!date) { alert('Bạn chưa chọn ngày!'); return; }
+            if (!title && !bg && !img) {
+                alert('Bạn cần nhập ít nhất tiêu đề, ảnh nền, hoặc ảnh kỉ niệm!');
+                return;
+            }
+
+            photos.push({ date, title, bg, img, note });
+            photos.sort((a, b) => new Date(a.date) - new Date(b.date));
+            savePhotos();
+            closeForm();
+
+            const [y, m] = date.split('-');
+            currentYear = parseInt(y);
+            currentMonth = parseInt(m) - 1;
+            isYearView = false;
+            switchView();
+        }
+
+        function deletePhoto(idx) {
+            if (confirm('Xóa ảnh này?')) {
+                photos.splice(idx, 1);
+                savePhotos();
+                renderDayPanel();
+                if (isYearView) renderYear(); else renderMonth();
+            }
+        }
+
+        // ========================
+        // CLOSE KHI CLICK NGOÀI
+        // ========================
+        document.getElementById('form-overlay').addEventListener('click', function (e) {
+            if (e.target === this) closeForm();
+        });
+        document.getElementById('day-overlay').addEventListener('click', function (e) {
+            if (e.target === this) closeDayPanel();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { closeForm(); closeDayPanel(); }
+        });
+
+        // ========================
+        // INIT
+        // ========================
+        switchView();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Our Little Corner</title>
+    <link rel="stylesheet" href="CSS\CLOCKBOX.css">
+    <script src="Javascript/auth-check.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="icon" href="IMG\PUG DANCE\beachpug-vib.gif" type="image/gif">
+</head>
+
+<body>
+    <!-- Banner chạy chữ-->
+    <div id="ticker-wrap">
+        <div id="ticker-track"></div>
+    </div>
+    <!-- NAVIGATION BAR -->
+
+    <nav id="navbar">
+        <div class="nav-logo">🌸 Our Little Corner</div>
+        <ul class="nav-links">
+            <li><a href="CLOCKBOX.html" class="nav-item active">🏠 Homepage</a></li>
+            <li><a href="MAP.html" class="nav-item">🗺️ Map</a></li>
+            <li><a href="GALLERY.html" class="nav-item">📷 Gallery</a></li>
+            <li><a href="CREDIT.html" class="nav-item">💝 Credits</a></li>
+        </ul>
+        <div class="nav-deco">🐷 ❤️ 🐷</div>
+    </nav>
+
+    <!-- NHẠC -->
+
+    <button class="bm-btn" id="bm-btn" title="Bật/tắt nhạc nền">
+        <span class="bm-note">🎵</span>
+    </button>
+
+    <audio id="bm-audio" loop preload="none" autoplay>
+        <source src="AUDIO/thanhtan.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- CLOCK ĐẾM THỜI GIAN -->
+    <h1 style="font-family: 'Comfortaa', sans-serif; font-weight: 700;">
+        ùuuuuuu được nhiu đây lâu rùi nèee:
+    </h1>
+    <div id="timer">Đang tính...</div>
+    <script src="Javascript\CLOCKBOX.js"></script>
+
+
+
+
+    <!-- GIFT BOXXXXXXX THÊM CÁI HIỆU ỨNG CHẠY CHỮ -->
+
+    <div class="wb-confetti-wrap" id="wb-confetti-wrap"></div>
+
+    <div class="wb-wrap" id="wb-wrap">
+        <div class="wb-icon" id="wb-icon">💌</div>
+        <div class="wb-text-inner">
+            <div class="wb-text" id="wb-text"><span class="wb-cursor"></span></div>
+        </div>
+        <div class="wb-hint" id="wb-hint">Bấm vào để mở ra nè 👆</div>
+    </div>
+
+
+
+    <!-- NHỮNG CÁI HÌNH ẢNH BAY QUA TỪ TRÁI SANG PHẢI -->
+    <div id="flying-pics-lane"></div>
+
+    <!-- CON HEO CHẠY -->
+
+
+    <!-- FOOTER -->
+    <footer>
+        <button onclick="showMessage()"
+            style="background: none; border: none; cursor: pointer; color: #ff4d6d; font-style: italic;">
+            Click here for a little surprise from Gthanhhhh 🌸
+            <p id="msg"></p>
+        </button>
+        <p>Made with ❤️ for Jolyyyyyy</p>
+    </footer>
+</body>
+
+</html>
