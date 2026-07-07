@@ -7,6 +7,7 @@
     <link rel="icon" href="IMG/PUG DANCE/beachpug-vib.gif" type="image/gif">
     <script src="Javascript/auth-check.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+    <script src="Javascript/bg-music.js" defer></script>
     <style>
         *,
         *::before,
@@ -726,6 +727,7 @@
             <li><a href="CREDIT.html" class="nav-item">💝 Credits</a></li>
         </ul>
         <div class="nav-deco">🐷 ❤️ 🐷</div>
+
     </nav>
 
     <div class="main">
@@ -1109,25 +1111,38 @@
 
         function renderDayPanel() {
             const content = document.getElementById('panel-content');
-            const dayPhotos = photos.filter(p => p.date === activeDateStr && p.img);
+            // lấy TẤT CẢ entry của ngày này, kể cả entry chỉ có tiêu đề/nền, không chỉ entry có ảnh
+            const dayEntries = photos.filter(p => p.date === activeDateStr);
 
-            if (dayPhotos.length === 0) {
+            if (dayEntries.length === 0) {
                 content.innerHTML = `<div class="empty-panel">Chưa có ảnh nào cho ngày này 🌸<br><span style="font-size:11px">Thêm ảnh bên dưới nhé!</span></div>`;
                 return;
             }
 
             content.innerHTML = '';
-            dayPhotos.forEach(p => {
+            dayEntries.forEach(p => {
                 const idx = photos.indexOf(p);
                 const card = document.createElement('div');
                 card.classList.add('photo-card');
-                card.innerHTML = `
-            <img src="${p.img}" alt="" onerror="this.style.display='none'" />
-            <div class="photo-info">
-                <div class="photo-note">${p.note || 'Không có ghi chú'}</div>
-                <button class="photo-delete" onclick="deletePhoto(${idx})">Xóa</button>
-            </div>
-        `;
+
+                if (p.img) {
+                    // entry có ảnh kỷ niệm -> hiện như cũ
+                    card.innerHTML = `
+                <img src="${p.img}" alt="" onerror="this.style.display='none'" />
+                <div class="photo-info">
+                    <div class="photo-note">${p.note || 'Không có ghi chú'}</div>
+                    <button class="photo-delete" onclick="deletePhoto(${idx})">Xóa</button>
+                </div>
+            `;
+                } else {
+                    // entry chỉ có tiêu đề/ảnh nền, không có ảnh kỷ niệm -> vẫn hiện được để xóa
+                    card.innerHTML = `
+                <div class="photo-info" style="padding:14px;">
+                    <div class="photo-note">${p.title ? '✨ ' + p.title : (p.note || 'Mục không có ảnh')}</div>
+                    <button class="photo-delete" onclick="deletePhoto(${idx})">Xóa</button>
+                </div>
+            `;
+                }
                 content.appendChild(card);
             });
         }
@@ -1187,10 +1202,16 @@
         }
 
         function deletePhoto(idx) {
-            if (confirm('Xóa ảnh này?')) {
+            if (confirm('Xóa mục này?')) {
                 photos.splice(idx, 1);
                 savePhotos();
                 renderDayPanel();
+
+                // cập nhật lại tiêu đề sự kiện ở đầu panel (phòng khi vừa xóa entry chứa tiêu đề)
+                const dayData = photos.find(p => p.date === activeDateStr && p.title);
+                document.getElementById('panel-event-title').textContent =
+                    dayData ? `✨ ${dayData.title}` : '';
+
                 if (isYearView) renderYear(); else renderMonth();
             }
         }

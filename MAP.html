@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
     <link rel="stylesheet" href="CSS/MAP.css">
+    <script src="Javascript/bg-music.js" defer></script>
 </head>
 
 <body>
@@ -33,9 +34,21 @@
             <span id="counter-num">0</span>
             nơi đã đi qua
         </div>
-        <button id="btn-add-manual" onclick="openFormManual()">+ Thêm địa điểm</button>
+        <div id="btn-group">
+            <button id="btn-add-manual" onclick="openFormManual()">+ Thêm địa điểm</button>
+            <button id="btn-list" onclick="openTripsList()">📋 Danh sách</button>
+        </div>
     </div>
-
+    <!-- PANEL DANH SÁCH ĐỊA ĐIỂM -->
+    <div id="list-overlay" class="overlay">
+        <div class="form-card">
+            <h2>📋 Danh sách địa điểm</h2>
+            <div id="trips-timeline"></div>
+            <div class="form-btns">
+                <button class="btn-cancel" onclick="closeTripsList()">Đóng</button>
+            </div>
+        </div>
+    </div>
     <!-- FORM THÊM ĐỊA ĐIỂM MỚI -->
     <div id="form-overlay" class="overlay">
         <div class="form-card">
@@ -389,6 +402,77 @@
         // INIT
         // ========================
         renderPins();
+
+
+
+
+
+        // ========================
+        // DANH SÁCH ĐỊA ĐIỂM (TIMELINE)
+        // ========================
+        function openTripsList() {
+            renderTripsTimeline();
+            document.getElementById('list-overlay').classList.add('open');
+        }
+
+        function closeTripsList() {
+            document.getElementById('list-overlay').classList.remove('open');
+        }
+
+        function renderTripsTimeline() {
+            const container = document.getElementById('trips-timeline');
+
+            // gom tất cả các chuyến đi của mọi pin thành 1 mảng phẳng
+            let flat = [];
+            pins.forEach((pin, pinIdx) => {
+                if (pin.trips.length === 0) {
+                    flat.push({ pinIdx, name: pin.name, date: null, note: '' });
+                } else {
+                    pin.trips.forEach(t => {
+                        flat.push({ pinIdx, name: pin.name, date: t.date, note: t.note });
+                    });
+                }
+            });
+
+            // sắp xếp theo thời gian tăng dần, pin chưa có ngày đẩy xuống cuối
+            flat.sort((a, b) => {
+                if (!a.date && !b.date) return 0;
+                if (!a.date) return 1;
+                if (!b.date) return -1;
+                return new Date(a.date) - new Date(b.date);
+            });
+
+            if (flat.length === 0) {
+                container.innerHTML = `<div class="timeline-empty">Chưa có địa điểm nào được lưu 🥲</div>`;
+                return;
+            }
+
+            container.innerHTML = flat.map(item => `
+        <div class="timeline-item" onclick="focusPin(${item.pinIdx})">
+            <div class="timeline-date">${item.date ? formatDate(item.date) : 'Chưa rõ'}</div>
+            <div class="timeline-info">
+                <div class="timeline-name">📍 ${item.name}</div>
+                ${item.note ? `<div class="timeline-note">${item.note}</div>` : ''}
+            </div>
+        </div>
+    `).join('');
+        }
+
+        // click vào 1 dòng trong danh sách -> bay tới pin đó và mở popup
+        function focusPin(pinIdx) {
+            closeTripsList();
+            const pin = pins[pinIdx];
+            map.flyTo([pin.lat, pin.lng], Math.max(map.getZoom(), 13), { duration: 1.2 });
+            setTimeout(() => markers[pinIdx].openPopup(), 400);
+        }
+
+        // đóng panel khi click ra ngoài / nhấn Esc
+        document.getElementById('list-overlay').addEventListener('click', function (e) {
+            if (e.target === this) closeTripsList();
+        });
+        document.getElementById('list-overlay').addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeTripsList();
+        });
     </script>
 </body>
 

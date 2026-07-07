@@ -215,9 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
 //NHỮNG CÁI HÌNH ẢNH BAY QUA TỪ TRÁI SANG PHẢI// 
 const flyingPicImages = [
     "IMG/GIF/beachpug-vib.gif",
+    "IMG/GIF/beachpug-vib.gif",
     "IMG/GIF/capoo-cow.gif",
     "IMG/GIF/capoolightstick.gif",
     "IMG/GIF/capooILY.gif",
+    "IMG/GIF/bugcat-capoo-ice-cream.gif",
+    "IMG/GIF/bugcat-capoo-shakingheart.gif"
 
 ];
 

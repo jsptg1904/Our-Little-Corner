@@ -148,6 +148,15 @@
             flex-shrink: 0;
         }
 
+        .credit-avatar {
+            width: 26px;
+            height: 26px;
+            object-fit: cover;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1.5px solid #ffc8d3;
+        }
+
         .credit-text {
             display: flex;
             flex-direction: column;
@@ -196,11 +205,52 @@
             font-size: 12px;
             color: #ffb3c1;
         }
+
+        /* FLOATING HEARTS */
+        .hearts-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -60px;
+            font-size: 22px;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(-10deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.5;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-110vh) rotate(10deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
 <body>
-
+    <!-- FLOATING HEARTS BG -->
+    <div class="hearts-bg" id="hearts-bg"></div>
+    <audio autoplay loop>
+        <source src="AUDIO\jingle background.mp3" type="audio/mpeg">
+    </audio>
     <nav id="navbar">
         <div class="nav-logo">🌸 Our Little Corner</div>
         <ul class="nav-links">
@@ -261,7 +311,20 @@
                         <div class="credit-note">Dán chặt vào màn hình (và em trong lúc meet nữa:>)</div>
                     </div>
                 </div>
-
+                <div class="credit-item">
+                    <img src="IMG/cushin.png" alt="Cushin" class="credit-avatar" />
+                    <div class="credit-text">
+                        <div class="credit-role">Cushin</div>
+                        <div class="credit-note">Tự mặc quần vào đi</div>
+                    </div>
+                </div>
+                <div class="credit-item">
+                    <img src="IMG/jol-pig.png" alt="Con heo" class="credit-avatar" />
+                    <div class="credit-text">
+                        <div class="credit-role">Heo (đừng bắt a đọc tên nó)</div>
+                        <div class="credit-note">Hay bị cắn</div>
+                    </div>
+                </div>
                 <div class="credit-item credit-em">
                     <div class="credit-emoji">💖</div>
                     <div class="credit-text">
@@ -276,7 +339,26 @@
             </div>
         </div>
     </div>
+    <script>
+        const emojis = ['💕', '🌸', '❤️', '🩷', '💗', '🌷'];
+        const bg = document.getElementById('hearts-bg');
 
+        function spawnHeart() {
+            const el = document.createElement('div');
+            el.classList.add('heart');
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = (14 + Math.random() * 18) + 'px';
+            const dur = 6 + Math.random() * 6;
+            el.style.animationDuration = dur + 's';
+            el.style.animationDelay = (Math.random() * 3) + 's';
+            bg.appendChild(el);
+            setTimeout(() => el.remove(), (dur + 3) * 1000);
+        }
+
+        setInterval(spawnHeart, 600);
+        for (let i = 0; i < 8; i++) spawnHeart();
+    </script>
 </body>
 
 </html>
