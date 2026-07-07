@@ -19,7 +19,7 @@ h1 {
 /* ============================
    NHẠC NỀN NHỎ (Background Music Button)
    Prefix "bm-" để không trùng id/class
-   với CLOCKBOX.css / wishbox.css / webuptime.css hiện tại
+   với CLOCKBOX.css hiện tại
 ============================ */
 
 .bm-btn {
@@ -56,7 +56,7 @@ h1 {
     transition: transform .2s ease;
 }
 
-/* Khi đang phát nhạc: nốt nhạc xoay tròn nhẹ nhàng */
+/* Khi đang phát nhạc: nốt nhạc xoay tròn */
 .bm-btn.bm-playing .bm-note {
     animation: bm-spin 3s linear infinite;
 }

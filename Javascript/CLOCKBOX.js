@@ -1,10 +1,12 @@
 // BANNER CHẠY CHỮ //
 // TICKER BANNER
 const tickerEvents = [
-    { icon: '🎊', text: 'Happy 2-month anniversaryyyy!!!' },
-    { icon: '🎂', text: 'Happy 2-month anniversaryyyy!!!' },
-    { icon: '🎊', text: 'Happy 2-month anniversaryyyy!!!' },
-    { icon: '🎂', text: 'Happy 2-month anniversaryyyy!!!' },
+    { icon: '💛', text: 'anh iuuuu emmmm lớmmmmmmmmmm íiii' },
+    { icon: '🐷', text: 'ai dthhhh théeeeee nhòoooooo' },
+    { icon: '✨', text: 'heheheheheheheh' },
+    { icon: '🧸', text: 'nếu em đọc được cái nàyyy thì tặng anh 1 tấm để a chạy kpi nhooo' },
+    { icon: '🐞', text: 'fix web thoi nàoooooooo' },
+    { icon: '🏴‍☠️', text: 'ahoyyyyyyyyyy' }
 ];
 
 (function buildTicker() {
@@ -12,7 +14,7 @@ const tickerEvents = [
     const html = tickerEvents.map(e =>
         `<div class="ticker-item"><span>${e.icon}</span>${e.text}</div>`
     ).join('');
-    track.innerHTML = html + html; // nhân đôi để loop mượt
+    track.innerHTML = html; // nhân đôi để loop mượt
 })();
 
 
@@ -25,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = document.getElementById('bm-audio');
     if (!btn || !audio) return;
 
-    audio.volume = 0.4; // chỉnh âm lượng mặc định ở đây (0 -> 1)
+    audio.volume = 0.3; // chỉnh âm lượng mặc định ở đây (0 -> 1)
 
     btn.addEventListener('click', () => {
         if (audio.paused) {
@@ -107,7 +109,7 @@ updateTimer();
 
 function showMessage() {
     const messages = ["Emmmm dthhhhhh théeeeeeeee", "Anhhhh iuuuuuu béeeeee lớmmmmmmmm íiiiii", "Cho anhhhh xinnn ảnhhhhh ikkkkkkkk", "Chưa có đủ kpi đâuuuuuuuu", "Kpi phải là 20 tấm mụt ngày cơ!!!!!", "Bún bò hemmmmmmm?", "nhom nhomm",
-        "Bleeeeeeeee"
+        "Bleeeeeeeee", "Ai dthhhhwww théeee nhòooooo"
     ];
     const random = messages[Math.floor(Math.random() * messages.length)];
     document.getElementById("msg").innerHTML = random;
@@ -127,7 +129,7 @@ const wbMessages = [
 
     Cảm ơn em vì một tháng vừa qua đã giúp anh hỉuuu em nhìuu hơn nữaaaaa!!!
     Anh iu em lắmm íii
-    Aiu của em - Gthanh`,
+    Aiu của em - Gthanh`
 
 ];
 
@@ -212,8 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //NHỮNG CÁI HÌNH ẢNH BAY QUA TỪ TRÁI SANG PHẢI// 
 const flyingPicImages = [
-    "IMG/PUG DANCE/beachpug-vib.gif",
-    "IMG/PUG DANCE/beachpug-vib.gif",
+    "IMG/GIF/beachpug-vib.gif",
+    "IMG/GIF/capoo-cow.gif",
+    "IMG/GIF/capoolightstick.gif",
+    "IMG/GIF/capooILY.gif",
+
 ];
 
 function spawnFlyingPic() {
